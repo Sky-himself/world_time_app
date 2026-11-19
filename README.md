@@ -1,14 +1,16 @@
-# world_time_app
+# World Time
 
-My first functional app. It's about telling current time in various countries (realtime)
+An early Flutter app for checking the current local time in several cities. Choose a location to see its time and a day or night view. The app converts the device clock using the bundled IANA time-zone database, so time conversion works offline.
 
-## Getting Started
+## Explore the code
 
-I did this project before Flutter v2, and so null safety isn't considered
+Explore [the location picker](lib/pages/Location.dart), [home screen](lib/pages/HomeScreen.dart), and [time-zone service](lib/services/world_time.dart).
 
-## Time source
+## Run locally
 
-The app uses the device clock and the IANA time-zone database bundled with
-the timezone package. Time conversion works offline, and requires an
-accurate device clock. Run flutter pub get to install dependencies, and
-update the timezone package when time-zone rules change.
+Use a Flutter SDK with Dart 3 that satisfies [`pubspec.yaml`](pubspec.yaml). Keep the `timezone` package current when time-zone rules change.
+
+```sh
+flutter pub get
+flutter run
+```
