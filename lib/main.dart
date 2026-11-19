@@ -1,5 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:timezone/data/latest.dart' as tz;
 import 'package:world_time_app/pages/HomeScreen.dart';
 import 'package:world_time_app/pages/Location.dart';
 import 'package:world_time_app/services/world_time.dart';
@@ -7,6 +7,7 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 
 
 void main() {
+  tz.initializeTimeZones();
   runApp(MaterialApp(
     routes: {
       '/': (context) => Loading(),
@@ -26,9 +27,10 @@ class _LoadingState extends State<Loading> {
   int counter = 0;
 
   void setUpWorldTime() async {
-    WorldTime instance = WorldTime(location:'Berlin', url:'Europe/berlin', flag:'berlin.png');
+    WorldTime instance = WorldTime(location:'Berlin', url:'Europe/Berlin', flag:'berlin.png');
     await Future.delayed(Duration(seconds: 2));
     await instance.getData();
+    if (!mounted) return;
     // print(instance.time);
     Navigator.pushReplacementNamed(context, '/home', arguments: {
       'location': instance.location,

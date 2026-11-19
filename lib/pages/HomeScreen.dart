@@ -7,20 +7,17 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
 
-  Map data = {};
+  Map<String, dynamic> data = {};
 
   @override
   Widget build(BuildContext context) {
 
-    data = data.isNotEmpty? data : ModalRoute.of(context).settings.arguments;
-    print(data);
+    if (data.isEmpty) {
+      data = ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
+    }
 
     String bgImage = data['isDayTime']? 'day.png': 'night.png';
     Color textColor = data['isDayTime']? Colors.black: Colors.white;
-    double timeFontSize = 66;
-
-    if (data['time'] == 'network error')
-      timeFontSize = 40;
 
     return Scaffold(
       body: Container(
@@ -32,8 +29,10 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         child: Center(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            FlatButton.icon(
-              color: data['isDayTime']? Colors.yellow: Colors.lightBlue,
+            TextButton.icon(
+              style: TextButton.styleFrom(
+                backgroundColor: data['isDayTime'] ? Colors.yellow : Colors.lightBlue,
+              ),
               label: Text(
                 'choose location',
                 style: TextStyle(
@@ -45,16 +44,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: textColor,
               ),
               onPressed: () async {
-                dynamic result = await Navigator.pushNamed(context, '/location');
-                //why dynamic up here???
-                setState(() {
-                  data = {
-                    'time': result['time'],
-                    'location': result['location'],
-                    'isDayTime': result['isDayTime'],
-                    'flag': result['flag'],
-                  };
-                });
+                final result = await Navigator.pushNamed<Map<String, dynamic>>(
+                  context, '/location',
+                );
+                if (!mounted || result == null) return;
+                setState(() => data = result);
               },
             ),
             SizedBox(
@@ -73,7 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Text(
               data['time'],
               style: TextStyle(
-                fontSize: timeFontSize,
+                fontSize: 66,
                 fontWeight: FontWeight.bold,
                   color: textColor,
               ),
